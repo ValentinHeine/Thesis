@@ -1,0 +1,15 @@
+=== NES XML multi-source (190MB shard, fixed 8 workers) ===
+NES sources=1 pass=1 tuples_per_s=440393.99408286624
+NES sources=2 pass=1 tuples_per_s=428944.4877201772
+NES sources=4 pass=1 tuples_per_s=430416.130619244
+NES sources=8 pass=1 tuples_per_s=434264.18222680467
+NES sources=16 pass=1 tuples_per_s=430193.95886151964
+NES sources=32 pass=1 tuples_per_s=404516.3440783662
+=== Expat baseline (190MB shard, one thread per source) ===
+Expat sources=1 tuples_per_s=130564
+Expat sources=2 tuples_per_s=258044
+Expat sources=4 tuples_per_s=516674
+Expat sources=8 tuples_per_s=1008239
+Expat sources=16 tuples_per_s=1171635
+Expat sources=32 tuples_per_s=1166505
+=== DONE ===

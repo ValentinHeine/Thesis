@@ -1,0 +1,12 @@
+system,threads,tuples_per_s,reps
+expat_sax,1,130800,5
+nes_xml,1,202600,3
+nes_xml,2,400200,3
+nes_xml,4,500800,3
+nes_xml,8,464900,3
+nes_xml,16,451000,3
+nes_csv,1,594100,3
+nes_csv,2,968800,3
+nes_csv,4,975000,3
+nes_csv,8,932100,3
+nes_csv,16,861900,3

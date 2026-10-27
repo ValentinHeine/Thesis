@@ -1,0 +1,4 @@
+variant,throughput_mb_s,speedup,description
+rapidxml,427,1.00,RapidXML parse of each record then walk children
+simd,730,1.71,AVX2 structural scan of each record then walk tag positions
+simd_fastnames,1519,3.56,as simd plus direct-mapped name dispatch instead of string hashing

@@ -1,0 +1,13 @@
+system,sources,threads,tuples_per_s
+nes_xml,1,8,440394
+nes_xml,2,8,428944
+nes_xml,4,8,430416
+nes_xml,8,8,434264
+nes_xml,16,8,430194
+nes_xml,32,8,404516
+expat_sax,1,1,130564
+expat_sax,2,2,258044
+expat_sax,4,4,516674
+expat_sax,8,8,1008239
+expat_sax,16,16,1171635
+expat_sax,32,32,1166505

@@ -1,0 +1,54 @@
+# name: formatter/ErrorHandlingXML.test
+# description: tests XML formatter error handling
+# groups: [Formatter, XML]
+
+# 1. Wrong field name (missing expected tag)
+CREATE LOGICAL SOURCE xmlWrongFieldName(KEY UINT64, VALUE UINT64);
+CREATE PHYSICAL SOURCE FOR xmlWrongFieldName TYPE File SET("XML" AS PARSER.`TYPE`);
+ATTACH INLINE
+<agencia><WRONG_KEY>1</WRONG_KEY><VALUE>10</VALUE></agencia>
+
+# 2. Wrong data type
+CREATE LOGICAL SOURCE xmlWrongDataType(KEY UINT64, VALUE UINT64);
+CREATE PHYSICAL SOURCE FOR xmlWrongDataType TYPE File SET("XML" AS PARSER.`TYPE`);
+ATTACH INLINE
+<agencia><KEY>not_a_number</KEY><VALUE>10</VALUE></agencia>
+
+# 3. Missing tag for one tuple
+CREATE LOGICAL SOURCE xmlMissingTag(KEY UINT64, VALUE UINT64);
+CREATE PHYSICAL SOURCE FOR xmlMissingTag TYPE File SET("XML" AS PARSER.`TYPE`);
+ATTACH INLINE
+<agencia><KEY>1</KEY><VALUE>10</VALUE></agencia>
+<agencia><KEY>2</KEY></agencia>
+
+# 4. Extra tag (should be ignored usually)
+CREATE LOGICAL SOURCE xmlExtraTag(KEY UINT64, VALUE UINT64);
+CREATE PHYSICAL SOURCE FOR xmlExtraTag TYPE File SET("XML" AS PARSER.`TYPE`);
+ATTACH INLINE
+<agencia><KEY>1</KEY><VALUE>10</VALUE><EXTRA>foo</EXTRA></agencia>
+
+# 5. Malformed XML (missing closing tag)
+CREATE LOGICAL SOURCE xmlMalformed(KEY UINT64, VALUE UINT64);
+CREATE PHYSICAL SOURCE FOR xmlMalformed TYPE File SET("XML" AS PARSER.`TYPE`);
+ATTACH INLINE
+<agencia><KEY>1</KEY><VALUE>10</agencia>
+
+SELECT * FROM xmlWrongFieldName INTO Checksum();
+----
+ERROR 2004
+
+SELECT * FROM xmlWrongDataType INTO Checksum();
+----
+ERROR 4005
+
+SELECT * FROM xmlMissingTag INTO Checksum();
+----
+ERROR 2004
+
+SELECT * FROM xmlExtraTag INTO Checksum();
+----
+1, 11
+
+SELECT * FROM xmlMalformed INTO Checksum();
+----
+ERROR 2004

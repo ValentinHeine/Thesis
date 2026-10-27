@@ -1,0 +1,25 @@
+# name: XML_Benchmark.test
+# description: benchmarks the XML input formatter
+# groups: [Formatter, XML, Benchmark]
+
+# Define the logical schema
+CREATE LOGICAL SOURCE xmlStream(KEY UINT64, VALUE UINT64, NAME VARSIZED);
+
+# Configure the physical source to use the XML parser
+CREATE PHYSICAL SOURCE FOR xmlStream TYPE File SET("XML" AS PARSER.`TYPE`);
+
+# Attach inline data using the default <agencia> tags
+ATTACH INLINE
+<agencia><KEY>1</KEY><VALUE>10</VALUE><NAME>user_a</NAME></agencia>
+<agencia><KEY>2</KEY><VALUE>20</VALUE><NAME>user_b</NAME></agencia>
+<agencia><KEY>3</KEY><VALUE>30</VALUE><NAME>user_c</NAME></agencia>
+<agencia><KEY>4</KEY><VALUE>40</VALUE><NAME>user_d</NAME></agencia>
+<agencia><KEY>5</KEY><VALUE>50</VALUE><NAME>user_e</NAME></agencia>
+
+# Create a checksum sink to verify correctness
+CREATE SINK allFieldsSink(xmlStream.KEY UINT64, xmlStream.VALUE UINT64, xmlStream.NAME VARSIZED) TYPE Checksum;
+
+# Execute query to trigger the indexer
+SELECT * FROM xmlStream INTO allFieldsSink;
+----
+5, 150
